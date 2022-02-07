@@ -1,6 +1,7 @@
 ﻿using JWT.Areas.Identity.Data;
 using JWT.Data;
 using JWT.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using WebApi.Service.Abstraction;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CRUDController : ControllerBase
@@ -29,13 +31,6 @@ namespace WebApi.Controllers
         {
             try
             {
-                var cookie = new JWT.Dto.Cookie("rToken").GetCookieValue(Request);
-
-                if (cookie == null)
-                {
-                    return Unauthorized("Loggati!");
-                }
-
                 var user = await _userService.GetUserByIdAsync(userId);
 
                 return Ok(user);

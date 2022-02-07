@@ -129,7 +129,7 @@ namespace JWT.Controllers
                     return Unauthorized(resp);
                 }
 
-                SetRefreshTokenCookie(resp.RefreshToken);
+                SetRefreshTokenCookie(resp.Token);
                 resp.HideRefreshToken();
                 return Ok(resp);
             }
