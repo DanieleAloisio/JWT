@@ -10,11 +10,11 @@ namespace Email
 {
     public class CustomEmailSender : IEmail
     {
-        private readonly AppSettings _appSettings;
+        private readonly SmtpSettings _smtpSettings;
 
-        public CustomEmailSender(IOptions<AppSettings> appSettings)
+        public CustomEmailSender(IOptions<SmtpSettings> smtpSettings)
         {
-            _appSettings = appSettings.Value;
+            _smtpSettings = smtpSettings.Value;
         }
 
         public async Task SendAsync(string from, string to, string subject, string html)
@@ -33,7 +33,7 @@ namespace Email
         }
         public async Task SendAsync(string from, IEnumerable<string> to, string subject, string html)
         {
-            var fromAddress = new MailAddress(string.IsNullOrEmpty(from) ? _appSettings.SMTP.From : from, ".NET Auth");
+            var fromAddress = new MailAddress(string.IsNullOrEmpty(from) ? _smtpSettings.From : from, ".NET Auth");
 
             using var email = new MailMessage()
             {
@@ -56,11 +56,11 @@ namespace Email
             try
             {
                 // Send email
-                using var smtp = new SmtpClient(_appSettings.SMTP.Host, _appSettings.SMTP.Port)
+                using var smtp = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port)
                 {
                     EnableSsl = true,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
-                    Credentials = new NetworkCredential(email.From.Address, _appSettings.SMTP.Password),
+                    Credentials = new NetworkCredential(email.From.Address, _smtpSettings.Password),
                     Timeout = 20000,
                 };
 

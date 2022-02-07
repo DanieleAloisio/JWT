@@ -85,7 +85,7 @@ namespace JWT.Service.Implementation
             var confirmEmailLink = $"{request}/confirm-email?token={WebUtility.UrlEncode(token)}&userId={newUser.Id}";
 
             //TODO
-            //await _emailSending.SendAsync(null, newUser.Email, "Confirm Email .NET Auth", $"<a href=\"{confirmEmailLink}\">Click here to confirm your email</a>");
+            await _emailSending.SendAsync(null, newUser.Email, "Confirm Email .NET Auth", $"<a href=\"{confirmEmailLink}\">Click here to confirm your email</a>");
 
             response.Success = true;
             return response;
@@ -120,6 +120,7 @@ namespace JWT.Service.Implementation
         }
 
         #endregion
+
         private async Task<AuthResponse> GenerateAuthenticationResultForUserAsync(ApplicationUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

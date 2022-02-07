@@ -64,13 +64,20 @@ namespace WebApi
 
             //Dependency Injection
             var appSettingsConfig = Configuration.GetSection("AppSettings");
+            var smtpConfig = Configuration.GetSection("SMTP");
+
             services.Configure<AppSettings>(appSettingsConfig);
+            services.Configure<SmtpSettings>(smtpConfig);
+
 
             services.AddSingleton(tokenValidationParameters);
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IEmail, CustomEmailSender>();
             services.AddScoped<IUserService, UserService>();
 
+            //Add Transiet: ti cambia ad ogni richiesta
+            //AddSingleton: ti dura tutta l'applicazione
+            //Scoped: mantiene lo stato per tutto il tempo della sessione
 
             // Adding Authentication  
             services.AddAuthentication(options =>
